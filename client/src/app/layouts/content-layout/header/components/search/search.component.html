@@ -1,0 +1,12 @@
+<div class="header-search">
+  <input
+    matInput
+    id="headerSearch"
+    placeholder="Type to search..."
+    class="header-search__input"
+    [(ngModel)]="searchTerm"
+  />
+  <button type="button" (click)="onSearch()" class="header-search__button">
+    <mat-icon class="icon" color="primary">search</mat-icon>
+  </button>
+</div>

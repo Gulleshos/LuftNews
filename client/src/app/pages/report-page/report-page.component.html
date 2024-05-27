@@ -1,0 +1,52 @@
+<div class="report-page">
+  <mat-card class="report-page__card">
+    <mat-card-header class="report-page__card-header">
+      <mat-card-title>Send report</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form
+        [formGroup]="reportForm"
+        (ngSubmit)="sendReport()"
+        class="report-page__card-form"
+      >
+        <mat-form-field color="primary">
+          <input
+            matInput
+            id="title"
+            formControlName="title"
+            placeholder="Title"
+          />
+          @if (reportForm.get("title")?.hasError("required")) {
+            <mat-error>Title is required.</mat-error>
+          } @else if (reportForm.get("title")?.hasError("minlength")) {
+            <mat-error>Minimum length is 3 characters.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field>
+          <textarea
+            matInput
+            id="text"
+            formControlName="text"
+            placeholder="I would like to tell you about..."
+          ></textarea>
+          @if (reportForm.get("text")?.hasError("required")) {
+            <mat-error>Text is required.</mat-error>
+          } @else if (reportForm.get("text")?.hasError("minlength")) {
+            <mat-error>Minimum length is 6 characters.</mat-error>
+          }
+        </mat-form-field>
+
+        <button
+          type="submit"
+          mat-raised-button
+          color="primary"
+          [disabled]="!reportForm.valid"
+        >
+          Send
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

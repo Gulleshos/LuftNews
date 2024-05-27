@@ -1,0 +1,70 @@
+<div class="header-container">
+  <mat-toolbar color="primary">
+    <button routerLink="/" class="header-title" mat-button type="button">
+      LuftNews
+    </button>
+    <span class="spacer"></span>
+
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      class="drawer"
+      type="button"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu>
+      <button mat-menu-item routerLink="search" type="button">Search</button>
+      @if (isAdmin) {
+        <button mat-menu-item routerLink="admin" type="button">
+          Admin panel
+        </button>
+      }
+      @if (isAuthenticated) {
+        <button mat-menu-item routerLink="report" type="button">
+          Leave a report
+        </button>
+        <button mat-menu-item (click)="logout()" type="button">Log out</button>
+      } @else {
+        <button mat-menu-item routerLink="auth/signin" type="button">
+          Log In / Sing Up
+        </button>
+      }
+    </mat-menu>
+
+    <div class="header-navigation">
+      @if (showSearchBar) {
+        <app-header-search
+          class="header-navigation__search"
+        ></app-header-search>
+        <div class="header-navigation__divider"></div>
+      }
+
+      @if (isAuthenticated) {
+        <button mat-button [matMenuTriggerFor]="menu" type="button">
+          {{ user ? user.username : "User" }}
+        </button>
+        <mat-menu #menu>
+          <button mat-menu-item routerLink="search" type="button">
+            Search
+          </button>
+          @if (isAdmin) {
+            <button mat-menu-item routerLink="admin" type="button">
+              Admin panel
+            </button>
+          }
+          <button mat-menu-item routerLink="report" type="button">
+            Leave a report
+          </button>
+          <button mat-menu-item (click)="logout()" type="button">
+            Log out
+          </button>
+        </mat-menu>
+      } @else {
+        <button mat-button routerLink="/auth/signin" type="button">
+          Log In / Sing Up
+        </button>
+      }
+    </div>
+  </mat-toolbar>
+</div>

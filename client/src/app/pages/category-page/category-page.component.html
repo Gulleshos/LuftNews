@@ -1,0 +1,28 @@
+<h1>{{ category.charAt(0).toUpperCase() + category.slice(1) }} news:</h1>
+@if (user) {
+  @if (isSubscribed) {
+    <button
+      mat-stroked-button
+      type="button"
+      (click)="unsubscribe()"
+    >
+      Unsubscribe
+    </button>
+  } @else  {
+    <button
+      mat-stroked-button
+      type="button"
+      (click)="subscribe()"
+    >
+      Subscribe
+    </button>
+  }
+}
+<app-news-list
+  [newsList]="newsList"
+  [isLoading]="isLoading"
+  [totalLength]="newsTotalLength"
+  [limit]="newsLimit"
+  [currentPage]="currentPage"
+  (pageChange)="handlePageEvent($event)"
+></app-news-list>

@@ -1,0 +1,15 @@
+.category-nav {
+  margin-bottom: 20px;
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  &__loader {
+    width: 100%;
+    margin: 0 auto;
+  }
+}

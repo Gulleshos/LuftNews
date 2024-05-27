@@ -1,0 +1,28 @@
+@if (isLoading) {
+  <mat-spinner class="loader"></mat-spinner>
+} @else {
+  <div class="news-list">
+    @for (news of newsList; track news._id) {
+      <app-news-card [news]="news"></app-news-card>
+    } @empty {
+      <div class="not-found" routerLink="/">
+        <img
+          ngSrc="./assets/404.svg"
+          alt="Not found"
+          height="200"
+          width="360"
+        />
+        <p>Not found</p>
+      </div>
+    }
+  </div>
+  @if (newsList.length < totalLength) {
+    <mat-paginator
+      class="news-paginator"
+      [pageSize]="limit"
+      [length]="totalLength"
+      [pageIndex]="currentPage - 1"
+      (page)="onPageChange($event)"
+    ></mat-paginator>
+  }
+}

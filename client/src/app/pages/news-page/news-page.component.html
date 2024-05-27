@@ -1,0 +1,58 @@
+@if (loadingNews) {
+  <mat-spinner class="loader"></mat-spinner>
+} @else {
+  @if (news) {
+    <app-news-page-news [news]="news"></app-news-page-news>
+  } @else {
+    <div class="not-found" routerLink="/">
+      <img ngSrc="./assets/404.svg" alt="Not found" height="200" width="360" />
+      <p>Not found</p>
+    </div>
+  }
+}
+
+<div class="comments">
+  <h3 class="comments__title">Comments:</h3>
+  @if (isAuthenticated) {
+    <form
+      class="comments__form"
+      [formGroup]="commentForm"
+      (ngSubmit)="createComment()"
+    >
+      <mat-form-field>
+        <mat-label>Leave a comment</mat-label>
+        <textarea
+          matInput
+          id="comment"
+          formControlName="comment"
+          placeholder="Ex. It makes me feel..."
+        ></textarea>
+      </mat-form-field>
+      <button
+        mat-flat-button
+        [disabled]="!isAuthenticated"
+        type="submit"
+        color="primary"
+      >
+        Post
+      </button>
+    </form>
+  }
+
+  @if (loadingComments) {
+    <mat-spinner class="loader"></mat-spinner>
+  } @else {
+    <div>
+      @for (comment of comments; track comment.author) {
+        <div class="comment">
+          <h4 class="comment__title">{{ comment.author.username }}</h4>
+          <p class="comment__date">{{ comment.date | date: "d MMMM yyyy" }}</p>
+          <mat-divider></mat-divider>
+          <p>{{ comment.text }}</p>
+        </div>
+      } @empty {
+        <p>No comments...</p>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,45 @@
+<button mat-icon-button (click)="drawer.toggle()" type="button">
+  <mat-icon>menu</mat-icon>
+</button>
+
+<mat-drawer
+  #drawer
+  class="drawer"
+  mode="over"
+  position="end"
+  (opened)="handleOpen()"
+  (closed)="handleOpen()"
+>
+  <mat-drawer-container class="drawer__container">
+    <mat-drawer-content class="drawer__content">
+      <header class="drawer__header">
+        <h2>LuftNews</h2>
+
+        <button
+          mat-icon-button
+          (click)="drawer.close()"
+          color="primary"
+          type="button"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </header>
+      <mat-divider class="drawer__divider"></mat-divider>
+      <app-header-search></app-header-search>
+      @if (isAuthenticated) {
+        <button mat-button color="primary" (click)="logout()" type="button">
+          Log out
+        </button>
+      } @else {
+        <button
+          mat-button
+          color="primary"
+          routerLink="/auth/signin"
+          type="button"
+        >
+          Log In / Sign Up
+        </button>
+      }
+    </mat-drawer-content>
+  </mat-drawer-container>
+</mat-drawer>

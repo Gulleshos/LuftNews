@@ -1,0 +1,10 @@
+<app-homepage-categories [categories]="categories"></app-homepage-categories>
+<h2>News:</h2>
+<app-news-list
+  [newsList]="newsList"
+  [isLoading]="newsLoading"
+  [totalLength]="newsTotalLength"
+  [limit]="newsLimit"
+  [currentPage]="currentPage"
+  (pageChange)="handlePageEvent($event)"
+></app-news-list>

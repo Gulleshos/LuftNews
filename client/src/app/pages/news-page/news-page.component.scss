@@ -1,0 +1,58 @@
+@import "../../../styles.scss";
+
+.not-found {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0;
+  cursor: pointer;
+}
+
+.loader {
+  margin: 40px auto;
+}
+
+.comments {
+  &__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
+    & mat-form-field {
+      width: 100%;
+    }
+
+    & button {
+      width: 100%;
+    }
+  }
+
+  & .comment {
+    margin-bottom: 30px;
+
+    &__title {
+      margin-bottom: 6px;
+    }
+
+    &__date {
+      margin-top: 0;
+      font-size: 12px;
+    }
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .comments__form {
+    align-items: end;
+
+    & mat-form-field {
+      flex: 1;
+    }
+
+    & button {
+      width: auto;
+    }
+  }
+}

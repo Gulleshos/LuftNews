@@ -1,0 +1,17 @@
+<section class="category-nav">
+  <h2>Categories:</h2>
+  <div class="category-nav__list">
+    @for (category of categories; track category.title) {
+      <button
+        mat-stroked-button
+        routerLink="/category/{{ category.title }}"
+        type="button"
+      >
+        {{ category.title.charAt(0).toUpperCase() + category.title.slice(1) }}
+      </button>
+    } @empty {
+      <mat-spinner class="category-nav__loader"></mat-spinner>
+    }
+  </div>
+  <mat-divider></mat-divider>
+</section>

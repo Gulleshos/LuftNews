@@ -1,0 +1,92 @@
+<div class="create-news-page">
+  <mat-card class="create-news__card">
+    <mat-card-header class="create-news__card-header">
+      <mat-card-title>Create news</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form
+        [formGroup]="createNewsForm"
+        (ngSubmit)="onSubmit()"
+        class="create-news__card-form"
+      >
+        <mat-form-field color="primary">
+          <input
+            matInput
+            id="title"
+            formControlName="title"
+            placeholder="Title"
+          />
+          @if (createNewsForm.get("title")?.hasError("required")) {
+            <mat-error>Title is required.</mat-error>
+          } @else if (createNewsForm.get("title")?.hasError("minlength")) {
+            <mat-error>Minimum length is 5 characters.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field>
+          <textarea
+            matInput
+            id="text"
+            formControlName="text"
+            placeholder="I would like to tell you about..."
+          ></textarea>
+          @if (createNewsForm.get("text")?.hasError("required")) {
+            <mat-error>Text is required.</mat-error>
+          } @else if (createNewsForm.get("text")?.hasError("minlength")) {
+            <mat-error>Minimum length is 6 characters.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="example-chip-list">
+          <mat-label>Categories</mat-label>
+          <mat-chip-grid #chipGrid aria-label="Category selection">
+            <mat-chip-row
+              *ngFor="let category of selectedCategories"
+              (removed)="remove(category)"
+            >
+              {{ category }}
+              <button
+                matChipRemove
+                [attr.aria-label]="'remove ' + category"
+                type="button"
+              >
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+          </mat-chip-grid>
+          <input
+            placeholder="New Category..."
+            #categoryInput
+            [formControl]="categoryCtrl"
+            [matChipInputFor]="chipGrid"
+            [matAutocomplete]="auto"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="add($event)"
+          />
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="selected($event)"
+          >
+            <mat-option
+              *ngFor="let category of filteredCategories | async"
+              [value]="category"
+              >{{ category }}</mat-option
+            >
+          </mat-autocomplete>
+          @if (createNewsForm.get("categories")?.hasError("required")) {
+            <mat-error>Title is required.</mat-error>
+          }
+        </mat-form-field>
+
+        <button
+          type="submit"
+          mat-raised-button
+          color="primary"
+          [disabled]="!createNewsForm.valid"
+        >
+          Submit
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

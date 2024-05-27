@@ -1,0 +1,25 @@
+.report-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  &__card {
+    &-header {
+      margin-bottom: 20px;
+    }
+
+    &-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+  }
+}
+
+@media screen and (min-width: 960px) {
+  .report-page__card {
+    width: 360px;
+  }
+}

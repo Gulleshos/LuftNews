@@ -1,0 +1,26 @@
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+app-header {
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+}
+
+.content-wrapper {
+  margin-top: 64px;
+  margin-bottom: 40px;
+  padding: 0 10px;
+  flex: 1 1 0;
+}
+
+@media screen and (min-width: 1280px) {
+  .content-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 64px auto 0 auto;
+  }
+}

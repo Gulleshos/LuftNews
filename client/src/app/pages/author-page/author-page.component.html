@@ -1,0 +1,8 @@
+<app-news-list
+  [newsList]="newsList"
+  [isLoading]="isLoading"
+  [totalLength]="newsTotalLength"
+  [limit]="newsLimit"
+  [currentPage]="currentPage"
+  (pageChange)="handlePageEvent($event)"
+></app-news-list>

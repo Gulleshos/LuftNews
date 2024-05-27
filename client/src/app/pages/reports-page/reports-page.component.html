@@ -1,0 +1,10 @@
+@for (report of reports; track report.title) {
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ report.title }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      {{ report.text }}
+    </mat-card-content>
+  </mat-card>
+}

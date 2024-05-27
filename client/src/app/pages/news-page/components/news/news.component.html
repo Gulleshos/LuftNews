@@ -1,0 +1,21 @@
+<div class="news">
+  <h1 class="news__title">{{ news.title }}</h1>
+  <p class="news__subtitle">
+    {{ news.author.username }}
+    <span>| {{ news.date | date: "d MMMM yyyy" }}</span>
+  </p>
+  <div class="news__categories">
+    @for (category of news.categories; track category) {
+      <button
+        mat-stroked-button
+        routerLink="/category/{{ category }}"
+        type="button"
+      >
+        {{ category.charAt(0).toUpperCase() + category.slice(1) }}
+      </button>
+    }
+  </div>
+  <mat-divider></mat-divider>
+  <p class="news__text">{{ news.text }}</p>
+  <mat-divider></mat-divider>
+</div>

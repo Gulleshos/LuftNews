@@ -1,0 +1,35 @@
+.admin-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+}
+
+.admin__title {
+  text-align: center;
+}
+
+.admin__nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.admin__content {
+}
+
+@media screen and (min-width: 600px) {
+  .admin__nav-buttons {
+    justify-content: center;
+    gap: 20px;
+  }
+}
+
+@media screen and (min-width: 960px) {
+}
+
+@media screen and (min-width: 1280px) {
+}
+
+@media screen and (min-width: 1920px) {
+}

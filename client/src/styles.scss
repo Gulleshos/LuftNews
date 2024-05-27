@@ -1,0 +1,48 @@
+@use "@angular/material" as mat;
+@import "@angular/cdk/overlay-prebuilt.css";
+
+$primary-color: #009688;
+$primary-color-light: #b2dfdb;
+$primary-color-contrast: #00695c;
+
+$accent-color: #ff9800;
+$primary-color-light: #ffcc80;
+$accent-color-contrast: #ef6c00;
+
+$gray-color: #212121;
+$gray-color-light: #e0e0e0;
+
+$my-primary: mat.define-palette(mat.$teal-palette, 500);
+$my-accent: mat.define-palette(mat.$orange-palette, A200, A100, A400);
+$my-warn: mat.define-palette(mat.$red-palette);
+
+$client-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $my-primary,
+      accent: $my-accent,
+      warn: $my-warn,
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+  )
+);
+
+@include mat.all-component-themes($client-theme);
+
+html,
+body {
+  height: 100%;
+}
+
+body,
+div {
+  margin: 0;
+  box-sizing: border-box;
+  color: $gray-color;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.scroll-lock {
+  overflow: hidden;
+}

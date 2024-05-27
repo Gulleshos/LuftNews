@@ -1,0 +1,15 @@
+@import "../../../../styles.scss";
+
+.footer {
+  width: 100%;
+  background: $gray-color;
+
+  &__content {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px 0;
+    text-align: center;
+    color: white;
+  }
+}

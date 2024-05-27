@@ -1,0 +1,21 @@
+.news {
+  &__subtitle {
+    font-size: 20px;
+    font-weight: 500;
+
+    & span {
+      font-weight: normal;
+    }
+  }
+
+  &__categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  &__text {
+    line-height: 1.5;
+  }
+}

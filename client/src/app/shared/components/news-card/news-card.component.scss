@@ -1,0 +1,19 @@
+.news-card {
+  width: 100%;
+}
+
+.news-card__content {
+  min-height: 160px;
+}
+.news-card__subtitle {
+  font-weight: normal;
+}
+
+.news-card__subtitle__author {
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.news-card__subtitle__author:hover {
+  text-decoration: underline;
+}

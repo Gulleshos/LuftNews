@@ -1,0 +1,53 @@
+<div class="search-page">
+  <h1 class="search-page__title">Search:</h1>
+  <form
+    [formGroup]="searchForm"
+    (ngSubmit)="onSearch()"
+    class="search-page__form"
+  >
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        id="query"
+        formControlName="query"
+        placeholder="Type to search..."
+      />
+      <button
+        mat-icon-button
+        color="primary"
+        matSuffix
+        type="submit"
+        [disabled]="!searchForm.valid"
+      >
+        <mat-icon>search</mat-icon>
+      </button>
+      @if (searchForm.get("query")?.hasError("required")) {
+        <mat-error>Search query is required.</mat-error>
+      } @else if (searchForm.get("query")?.hasError("minlength")) {
+        <mat-error>Minimum length is 3 characters.</mat-error>
+      }
+    </mat-form-field>
+  </form>
+
+  <div class="search-page__categories">
+    <button mat-stroked-button (click)="filter(null)" type="button">All</button>
+    @for (category of categories; track category.title) {
+      <button mat-stroked-button (click)="filter(category.title)" type="button">
+        {{ category.title.charAt(0).toUpperCase() + category.title.slice(1) }}
+      </button>
+    } @empty {
+      <mat-spinner class="category-nav__loader"></mat-spinner>
+    }
+  </div>
+
+  <div class="news__list">
+    <app-news-list
+      [newsList]="newsList"
+      [isLoading]="isLoading"
+      [totalLength]="newsTotalLength"
+      [limit]="newsLimit"
+      [currentPage]="currentPage"
+      (pageChange)="handlePageEvent($event)"
+    ></app-news-list>
+  </div>
+</div>

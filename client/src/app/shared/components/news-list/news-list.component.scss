@@ -1,0 +1,34 @@
+.loader {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.not-found {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0;
+  cursor: pointer;
+}
+
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.news-paginator {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (min-width: 960px) {
+  .news-list {
+    max-width: 860px;
+    margin: 0 auto;
+    gap: 60px;
+  }
+}
