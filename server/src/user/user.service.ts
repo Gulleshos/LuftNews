@@ -12,6 +12,7 @@ import emailjs from '@emailjs/nodejs';
 import { CreateNewsDto } from '../news/dto/create-news.dto';
 import { SubscribeDto } from './dto/subscribe.dto';
 import { LoggedUser } from '../auth/auth.interface';
+import * as process from 'process';
 
 @Injectable()
 export class UserService {
@@ -95,9 +96,9 @@ export class UserService {
     };
 
     emailjs
-      .send('service_1nqpf0s', 'template_5z1dknb', templateParams, {
-        publicKey: '4fwnt_4PgtHfqBUuG',
-        privateKey: 'fA12np_5J26uThVbjZYZ_',
+      .send(process.env.SERVICE_ID, process.env.TEMPLATE_ID, templateParams, {
+        publicKey: process.env.PUBLIC_KEY,
+        privateKey: process.env.PRIVATE_KEY,
       })
       .then(
         (response) => {
