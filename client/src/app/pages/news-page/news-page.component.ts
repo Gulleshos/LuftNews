@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NewsService } from '../../core/services/news.service';
 import { User, AuthResponse } from '../../core/interfaces/user.interface';
@@ -42,7 +42,7 @@ import { catchError, EMPTY, Subject, takeUntil } from 'rxjs';
   templateUrl: './news-page.component.html',
   styleUrl: './news-page.component.scss',
 })
-export class NewsPageComponent implements OnInit {
+export class NewsPageComponent implements OnInit, OnDestroy {
   isAuthenticated: boolean = false;
   news: News | null = null;
   user: User | null = null;
@@ -52,11 +52,11 @@ export class NewsPageComponent implements OnInit {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private newsService: NewsService,
-    private authService: AuthService,
-    private commentService: CommentService,
-    private formBuilder: FormBuilder,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly newsService: NewsService,
+    private readonly authService: AuthService,
+    private readonly commentService: CommentService,
+    private readonly formBuilder: FormBuilder,
   ) {
     this.authService.authStatus.pipe(takeUntil(this.destroy$)).subscribe({
       next: (authStatus: boolean) => {
@@ -105,6 +105,11 @@ export class NewsPageComponent implements OnInit {
           },
         });
     }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   createComment() {

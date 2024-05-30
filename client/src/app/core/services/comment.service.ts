@@ -7,7 +7,7 @@ import { Comment } from '../interfaces/news.interface';
 @Injectable({ providedIn: 'root' })
 export class CommentService {
   private serverUrl: string = environment.serverUrl;
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   createComment(newsId: string, comment: Comment): Observable<Comment> {
     const headers = new HttpHeaders({

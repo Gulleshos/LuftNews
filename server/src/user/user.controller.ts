@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { Roles } from '../auth/decorators/role.decorator';
@@ -8,13 +8,18 @@ import { SubscribeDto } from './dto/subscribe.dto';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   @Get('report')
   @UseGuards(JwtAuthGuard)
   @Roles([RoleEnum.ADMIN])
   async getReports() {
     return await this.userService.findAllReports();
+  }
+
+  @Get('author/:id')
+  async getAuthorById(@Param('id') authorId: string) {
+    return await this.userService.getAuthorById(authorId);
   }
 
   @Post('report')

@@ -16,7 +16,7 @@ import { AddCommentDto } from './dto/add-comment.dto';
 
 @Controller('news')
 export class NewsController {
-  constructor(private newsService: NewsService) {}
+  constructor(private readonly newsService: NewsService) {}
 
   @Post()
   @UseGuards(JwtAuthGuard)

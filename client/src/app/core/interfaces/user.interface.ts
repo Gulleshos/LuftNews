@@ -31,3 +31,9 @@ export interface AuthResponse {
   user: User;
   token: string;
 }
+
+export interface NewsAuthor {
+  id: string;
+  username: string;
+  email: string;
+}

@@ -36,8 +36,8 @@ export class HeaderComponent implements OnInit {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private authService: AuthService,
-    private router: Router,
+    private readonly authService: AuthService,
+    private readonly router: Router,
   ) {
     this.authService.authStatus.pipe(takeUntil(this.destroy$)).subscribe({
       next: (authStatus: boolean) => {

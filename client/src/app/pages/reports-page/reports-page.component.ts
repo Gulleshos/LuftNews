@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from '../../core/services/user.service';
 import { Report } from '../../core/interfaces/user.interface';
 import {
@@ -23,11 +23,11 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './reports-page.component.html',
   styleUrl: './reports-page.component.scss',
 })
-export class ReportsPageComponent implements OnInit {
+export class ReportsPageComponent implements OnInit, OnDestroy {
   reports: Report[] = [];
   private destroy$ = new Subject<void>();
 
-  constructor(private userService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   ngOnInit() {
     this.userService
@@ -38,5 +38,10 @@ export class ReportsPageComponent implements OnInit {
           this.reports = reports;
         },
       });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

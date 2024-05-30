@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   Category,
   News,
@@ -56,7 +56,7 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './search-page.component.html',
   styleUrl: './search-page.component.scss',
 })
-export class SearchPageComponent implements OnInit {
+export class SearchPageComponent implements OnInit, OnDestroy {
   newsList: News[] = [];
   newsLimit: number = 10;
   newsTotalLength!: number;
@@ -69,9 +69,9 @@ export class SearchPageComponent implements OnInit {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private searchService: SearchService,
-    private newsService: NewsService,
-    private formBuilder: FormBuilder,
+    private readonly searchService: SearchService,
+    private readonly newsService: NewsService,
+    private readonly formBuilder: FormBuilder,
   ) {
     this.searchForm = this.formBuilder.group({
       query: ['', [Validators.required, Validators.minLength(3)]],
@@ -87,6 +87,11 @@ export class SearchPageComponent implements OnInit {
       });
     this.query = this.searchService.getSearchTerm();
     this.fetchNews();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onSearch() {

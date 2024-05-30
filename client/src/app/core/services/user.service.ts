@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import {Report, User} from '../interfaces/user.interface';
+import { Report, User } from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +11,8 @@ import {Report, User} from '../interfaces/user.interface';
 export class UserService {
   private readonly serverUrl = environment.serverUrl;
   constructor(
-    private http: HttpClient,
-    private authService: AuthService,
+    private readonly http: HttpClient,
+    private readonly authService: AuthService,
   ) {}
 
   sendReport(report: {
@@ -29,19 +29,41 @@ export class UserService {
     return null;
   }
 
+  getAuthor(id: string): Observable<{
+    username: string;
+    email: string;
+  }> {
+    return this.http.get<{
+      username: string;
+      email: string;
+    }>(`${this.serverUrl}/user/author/${id}`);
+  }
+
   getReports(): Observable<Report[]> {
     return this.http.get<Report[]>(`${this.serverUrl}/user/report`);
   }
 
-  isSubscribed(userId: string, category: string): Observable<{ isSubscribed: boolean }> {
-    return this.http.post<{ isSubscribed: boolean }>(`${this.serverUrl}/user/issubscribed`, { userId, category });
+  isSubscribed(
+    userId: string,
+    category: string,
+  ): Observable<{ isSubscribed: boolean }> {
+    return this.http.post<{ isSubscribed: boolean }>(
+      `${this.serverUrl}/user/issubscribed`,
+      { userId, category },
+    );
   }
 
   subscribe(userId: string, category: string): Observable<User> {
-    return this.http.post<User>(`${this.serverUrl}/user/subscribe`, { userId, category });
+    return this.http.post<User>(`${this.serverUrl}/user/subscribe`, {
+      userId,
+      category,
+    });
   }
 
   unsubscribe(userId: string, category: string): Observable<User> {
-    return this.http.post<User>(`${this.serverUrl}/user/unsubscribe`, { userId, category });
+    return this.http.post<User>(`${this.serverUrl}/user/unsubscribe`, {
+      userId,
+      category,
+    });
   }
 }

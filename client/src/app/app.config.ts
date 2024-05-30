@@ -5,11 +5,14 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { tokenInterceptor } from './core/interceptors/token.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { cacheInterceptor } from './core/interceptors/cache.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([errorInterceptor, tokenInterceptor])),
+    provideHttpClient(
+      withInterceptors([errorInterceptor, tokenInterceptor, cacheInterceptor]),
+    ),
     provideAnimationsAsync(),
   ],
 };

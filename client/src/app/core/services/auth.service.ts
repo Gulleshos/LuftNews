@@ -11,7 +11,7 @@ export class AuthService {
   private _authUser = new BehaviorSubject<AuthResponse | null>(null);
   private readonly serverUrl = environment.serverUrl;
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     this.isAuthenticated();
   }
 

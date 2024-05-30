@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -12,14 +13,21 @@ import { AddCommentDto } from './dto/add-comment.dto';
 import { PaginationDto } from './dto/pagination.dto';
 import { NewsResponse } from './news.interface';
 import { UserService } from '../user/user.service';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class NewsService {
   constructor(
-    @InjectModel(News.name) private newsModel: Model<News>,
-    @InjectModel(Comment.name) private commentModel: Model<Comment>,
-    private userService: UserService,
+    @InjectModel(News.name) private readonly newsModel: Model<News>,
+    @InjectModel(Comment.name) private readonly commentModel: Model<Comment>,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+    private readonly userService: UserService,
   ) {}
+
+  private getCacheKey(page: number, limit: number): string {
+    return `news_page_${page}_limit_${limit}`;
+  }
 
   private async paginate(
     model: Model<any>,
@@ -39,7 +47,7 @@ export class NewsService {
   }
 
   async createNews(createNewsDto: CreateNewsDto): Promise<News> {
-    this.userService.notifySubscribers(createNewsDto);
+    await this.userService.notifySubscribers(createNewsDto);
     return await this.newsModel.create(createNewsDto);
   }
 
@@ -47,7 +55,17 @@ export class NewsService {
     page = 1,
     limit = 10,
   }: PaginationDto): Promise<NewsResponse> {
-    return this.paginate(this.newsModel, {}, page, limit);
+    const cacheKey = this.getCacheKey(page, limit);
+    const cachedNews = await this.cacheManager.get<News[]>(cacheKey);
+    const cachedTotal = await this.cacheManager.get<number>('totalNews');
+
+    if (cachedNews && cachedTotal) {
+      return { data: cachedNews, totalNews: cachedTotal };
+    }
+
+    const news = await this.paginate(this.newsModel, {}, page, limit);
+    await this.cacheManager.set('news', news);
+    return news;
   }
 
   async findNewsById(newsId: string): Promise<News | null> {

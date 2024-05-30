@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { AuthResponse, User } from '../../core/interfaces/user.interface';
 import { AuthService } from '../../core/services/auth.service';
 import { MatButton, MatFabButton } from '@angular/material/button';
@@ -25,11 +25,11 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './admin-page.component.html',
   styleUrl: './admin-page.component.scss',
 })
-export class AdminPageComponent {
+export class AdminPageComponent implements OnDestroy {
   user: User | null = null;
   private destroy$ = new Subject<void>();
 
-  constructor(private authService: AuthService) {
+  constructor(private readonly authService: AuthService) {
     this.authService.authUser.pipe(takeUntil(this.destroy$)).subscribe({
       next: (authStatus: AuthResponse | null) => {
         if (authStatus) {
@@ -37,5 +37,10 @@ export class AdminPageComponent {
         }
       },
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -17,8 +17,8 @@ import * as process from 'process';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<User>,
-    @InjectModel(Report.name) private reportModel: Model<Report>,
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(Report.name) private readonly reportModel: Model<Report>,
   ) {}
 
   async getUserByEmail(email: string): Promise<{
@@ -29,6 +29,13 @@ export class UserService {
     role: RoleEnum;
   }> {
     return this.userModel.findOne({ email });
+  }
+  async getAuthorById(userId: string): Promise<{
+    username: string;
+    email: string;
+  }> {
+    const user = await this.userModel.findById(userId);
+    return { username: user.username, email: user.email };
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<UserResponse> {
@@ -43,7 +50,7 @@ export class UserService {
       email: createUserDto.email,
       username: createUserDto.username,
       password: hashedPassword,
-      role: RoleEnum.USER,
+      role: createUserDto.role ? createUserDto.role : RoleEnum.USER,
     });
 
     const savedUser = await newUser.save();
@@ -85,7 +92,9 @@ export class UserService {
   async isSubscribed(
     subscribeDto: SubscribeDto,
   ): Promise<{ isSubscribed: boolean }> {
-    const result = await this.userModel.findOne({ subscribedCategories: { $in: [subscribeDto.category] } });
+    const result = await this.userModel.findOne({
+      subscribedCategories: { $in: [subscribeDto.category] },
+    });
     return { isSubscribed: !!result };
   }
 

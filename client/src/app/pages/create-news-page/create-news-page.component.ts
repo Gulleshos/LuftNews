@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -72,7 +78,7 @@ import { AsyncPipe, NgForOf } from '@angular/common';
   templateUrl: './create-news-page.component.html',
   styleUrl: './create-news-page.component.scss',
 })
-export class CreateNewsPageComponent implements OnInit {
+export class CreateNewsPageComponent implements OnInit, OnDestroy {
   user: User | null = null;
   categories: Category[] = [];
   separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -84,11 +90,11 @@ export class CreateNewsPageComponent implements OnInit {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private newsService: NewsService,
-    private formBuilder: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private _snackBar: MatSnackBar,
+    private readonly newsService: NewsService,
+    private readonly formBuilder: FormBuilder,
+    private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly _snackBar: MatSnackBar,
   ) {
     this.filteredCategories = this.categoryCtrl.valueChanges.pipe(
       startWith(null),
@@ -113,7 +119,7 @@ export class CreateNewsPageComponent implements OnInit {
   }
   createNewsForm: FormGroup;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.newsService
       .getNewsCategories()
       .pipe(takeUntil(this.destroy$))
@@ -121,6 +127,11 @@ export class CreateNewsPageComponent implements OnInit {
         this.categories = categories;
         this.allCategories = categories.map((category) => category.title);
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   add(event: MatChipInputEvent): void {
@@ -172,7 +183,7 @@ export class CreateNewsPageComponent implements OnInit {
         date: new Date().toISOString(),
       };
 
-      console.log(news)
+      console.log(news);
       this.newsService
         .createNews(news)
 

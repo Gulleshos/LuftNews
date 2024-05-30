@@ -1,4 +1,4 @@
 export const environment = {
-  serverUrl: 'https://luftapi.vercel.app',
+  serverUrl: 'http://localhost:3000',
   production: true,
 };

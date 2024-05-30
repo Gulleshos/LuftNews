@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -62,13 +62,14 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './create-category-page.component.html',
   styleUrl: './create-category-page.component.scss',
 })
-export class CreateCategoryPageComponent {
+export class CreateCategoryPageComponent implements OnDestroy {
   private destroy$ = new Subject<void>();
+
   constructor(
-    private formBuilder: FormBuilder,
-    private newsService: NewsService,
-    private router: Router,
-    private _snackBar: MatSnackBar,
+    private readonly formBuilder: FormBuilder,
+    private readonly newsService: NewsService,
+    private readonly router: Router,
+    private readonly _snackBar: MatSnackBar,
   ) {
     this.createCategoryForm = this.formBuilder.group({
       title: ['', [Validators.required]],
@@ -78,7 +79,12 @@ export class CreateCategoryPageComponent {
 
   createCategoryForm: FormGroup;
 
-  onSubmit() {
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  onSubmit(): void {
     if (this.createCategoryForm.valid) {
       const category = this.createCategoryForm.value;
 

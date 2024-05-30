@@ -1,19 +1,11 @@
 <h1>{{ category.charAt(0).toUpperCase() + category.slice(1) }} news:</h1>
 @if (user) {
   @if (isSubscribed) {
-    <button
-      mat-stroked-button
-      type="button"
-      (click)="unsubscribe()"
-    >
+    <button mat-stroked-button type="button" (click)="unsubscribe()">
       Unsubscribe
     </button>
-  } @else  {
-    <button
-      mat-stroked-button
-      type="button"
-      (click)="subscribe()"
-    >
+  } @else {
+    <button mat-stroked-button type="button" (click)="subscribe()">
       Subscribe
     </button>
   }

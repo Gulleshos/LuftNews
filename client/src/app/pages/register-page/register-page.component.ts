@@ -19,7 +19,6 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDivider } from '@angular/material/divider';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-register-page',
@@ -42,12 +41,11 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './register-page.component.scss',
 })
 export class RegisterPageComponent {
-  private destroy$ = new Subject<void>();
   constructor(
-    private authService: AuthService,
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private _snackBar: MatSnackBar,
+    private readonly authService: AuthService,
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router,
+    private readonly _snackBar: MatSnackBar,
   ) {}
 
   registerForm: FormGroup = this.formBuilder.group({
@@ -60,23 +58,20 @@ export class RegisterPageComponent {
     if (this.registerForm.valid) {
       const { username, email, password } = this.registerForm.value;
 
-      this.authService
-        .register(username, email, password)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: () => {
-            this.router.navigateByUrl('/');
-            this._snackBar.open('Welcome!', 'Close', {
-              duration: 5000,
-            });
-          },
-          error: (error) => {
-            this._snackBar.open(error.error.message, 'Close', {
-              duration: 5000,
-              panelClass: ['error-snackbar'],
-            });
-          },
-        });
+      this.authService.register(username, email, password).subscribe({
+        next: () => {
+          this.router.navigateByUrl('/');
+          this._snackBar.open('Welcome!', 'Close', {
+            duration: 5000,
+          });
+        },
+        error: (error) => {
+          this._snackBar.open(error.error.message, 'Close', {
+            duration: 5000,
+            panelClass: ['error-snackbar'],
+          });
+        },
+      });
     }
   }
 }

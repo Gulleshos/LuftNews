@@ -17,8 +17,8 @@ import { FullUserResponse } from '../user/user.interface';
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
-    private jwtService: JwtService,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async validateUserLogin(email: string, pass: string): Promise<boolean> {

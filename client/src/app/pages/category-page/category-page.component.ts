@@ -1,24 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { News, NewsResponse } from '../../core/interfaces/news.interface';
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NewsService } from '../../core/services/news.service';
 import { NewsListComponent } from '../../shared/components/news-list/news-list.component';
 import { Subject, takeUntil } from 'rxjs';
-import {MatButton} from "@angular/material/button";
-import {UserService} from "../../core/services/user.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {User, AuthResponse} from "../../core/interfaces/user.interface";
-import {AuthService} from "../../core/services/auth.service";
+import { MatButton } from '@angular/material/button';
+import { UserService } from '../../core/services/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { User, AuthResponse } from '../../core/interfaces/user.interface';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-category-page',
   standalone: true,
-    imports: [NewsListComponent, MatButton, RouterLink],
+  imports: [NewsListComponent, MatButton, RouterLink],
   templateUrl: './category-page.component.html',
   styleUrl: './category-page.component.scss',
 })
-export class CategoryPageComponent implements OnInit {
+export class CategoryPageComponent implements OnInit, OnDestroy {
   category: string = '';
   newsList: News[] = [];
   isLoading: boolean = false;
@@ -30,14 +30,14 @@ export class CategoryPageComponent implements OnInit {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private newsService: NewsService,
-    private userService: UserService,
-    private authService: AuthService,
-    private _snackBar: MatSnackBar,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly newsService: NewsService,
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+    private readonly _snackBar: MatSnackBar,
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     const category = this.activatedRoute.snapshot.paramMap.get('category');
     if (category) {
       this.category = category;
@@ -53,20 +53,26 @@ export class CategoryPageComponent implements OnInit {
     });
 
     if (this.user) {
-      this.userService.isSubscribed(this.user._id, this.category).pipe(takeUntil(this.destroy$))
+      this.userService
+        .isSubscribed(this.user._id, this.category)
+        .pipe(takeUntil(this.destroy$))
         .subscribe((res: { isSubscribed: boolean }) => {
           this.isSubscribed = res.isSubscribed;
         });
     }
-
   }
 
-  handlePageEvent(pageEvent: PageEvent) {
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  handlePageEvent(pageEvent: PageEvent): void {
     this.currentPage = pageEvent.pageIndex + 1;
     this.fetchNews();
   }
 
-  fetchNews() {
+  fetchNews(): void {
     this.isLoading = true;
     this.newsService
       .getNewsByCategory(this.category, this.currentPage, this.newsLimit)
@@ -78,8 +84,9 @@ export class CategoryPageComponent implements OnInit {
       });
   }
 
-  subscribe() {
-    this.userService.subscribe(this.user!._id, this.category)
+  subscribe(): void {
+    this.userService
+      .subscribe(this.user!._id, this.category)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.isSubscribed = true;
@@ -89,8 +96,9 @@ export class CategoryPageComponent implements OnInit {
       });
   }
 
-  unsubscribe() {
-    this.userService.unsubscribe(this.user!._id, this.category)
+  unsubscribe(): void {
+    this.userService
+      .unsubscribe(this.user!._id, this.category)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.isSubscribed = false;

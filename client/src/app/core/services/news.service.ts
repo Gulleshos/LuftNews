@@ -14,7 +14,7 @@ import {
 export class NewsService {
   private serverUrl: string = environment.serverUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   getNews(page: number, limit: number): Observable<NewsResponse> {
     return this.http.get<NewsResponse>(

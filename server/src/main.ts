@@ -1,9 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
+import { SeederService } from './seeder/seeder.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
+
   app.useGlobalPipes(
     new ValidationPipe({
       exceptionFactory: (errors) => {
@@ -16,6 +18,11 @@ async function bootstrap() {
       stopAtFirstError: true,
     }),
   );
+
+  const seeder = app.get(SeederService);
+  await seeder.seed();
+
   await app.listen(3000);
 }
+
 bootstrap();

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NewsService } from '../../core/services/news.service';
 import {
   Category,
@@ -17,7 +17,7 @@ import { Subject, takeUntil } from 'rxjs';
   imports: [CategoriesComponent, NewsListComponent],
   templateUrl: './home-page.component.html',
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent implements OnInit, OnDestroy {
   categories: Category[] = [];
   newsList: News[] = [];
   newsLoading: boolean = false;
@@ -27,8 +27,8 @@ export class HomePageComponent implements OnInit {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private newsService: NewsService,
-    private newsCacheService: NewsCacheService,
+    private readonly newsService: NewsService,
+    private readonly newsCacheService: NewsCacheService,
   ) {}
 
   ngOnInit() {
@@ -41,6 +41,11 @@ export class HomePageComponent implements OnInit {
     this.fetchNews();
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   handlePageEvent(pageEvent: PageEvent) {
     this.currentPage = pageEvent.pageIndex + 1;
     this.fetchNews();
@@ -49,21 +54,21 @@ export class HomePageComponent implements OnInit {
   fetchNews() {
     this.newsLoading = true;
 
-    const cachedNews = this.newsCacheService.getCachedNews();
-    if (cachedNews) {
-      if (cachedNews.length < this.newsTotalLength) {
-        this.newsService
-          .getNews(this.currentPage, this.newsLimit)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((res: NewsResponse) => {
-            this.newsList = res.data;
-            this.newsTotalLength = res.totalNews;
-            this.newsCacheService.updateCache(res.data);
-          });
-      }
-      const startIndex  = (this.currentPage - 1) * this.newsLimit;
-      this.newsList = cachedNews.slice(startIndex, startIndex + this.newsLimit);
-      this.newsLoading = false;
+    //const cachedNews = this.newsCacheService.getCachedNews();
+    if (false) {
+      // if (cachedNews.length < this.newsTotalLength) {
+      //   this.newsService
+      //     .getNews(this.currentPage, this.newsLimit)
+      //     .pipe(takeUntil(this.destroy$))
+      //     .subscribe((res: NewsResponse) => {
+      //       this.newsList = res.data;
+      //       this.newsTotalLength = res.totalNews;
+      //       this.newsCacheService.updateCache(res.data);
+      //     });
+      // }
+      // const startIndex  = (this.currentPage - 1) * this.newsLimit;
+      // this.newsList = cachedNews.slice(startIndex, startIndex + this.newsLimit);
+      // this.newsLoading = false;
     } else {
       this.newsService
         .getNews(this.currentPage, this.newsLimit)
@@ -72,7 +77,6 @@ export class HomePageComponent implements OnInit {
           this.newsList = res.data;
           this.newsTotalLength = res.totalNews;
           this.newsLoading = false;
-          this.newsCacheService.updateCache(res.data);
         });
     }
   }

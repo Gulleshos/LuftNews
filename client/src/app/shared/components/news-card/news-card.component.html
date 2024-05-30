@@ -10,7 +10,9 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content class="news-card__content">
-    <p>{{ news.text.length > 160 ? news.text.slice(0, 160) + '...' : news.text }}</p>
+    <p>
+      {{ news.text.length > 160 ? news.text.slice(0, 160) + "..." : news.text }}
+    </p>
   </mat-card-content>
   <mat-divider></mat-divider>
   <mat-card-actions>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import {
   MatCard,
@@ -38,15 +38,16 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './report-page.component.html',
   styleUrl: './report-page.component.scss',
 })
-export class ReportPageComponent {
+export class ReportPageComponent implements OnDestroy {
   user: User | null = null;
   private destroy$ = new Subject<void>();
+
   constructor(
-    private formBuilder: FormBuilder,
-    private userService: UserService,
-    private authService: AuthService,
-    private router: Router,
-    private _snackBar: MatSnackBar,
+    private readonly formBuilder: FormBuilder,
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly _snackBar: MatSnackBar,
   ) {
     this.authService.authUser.pipe(takeUntil(this.destroy$)).subscribe({
       next: (authStatus: AuthResponse | null) => {
@@ -61,6 +62,11 @@ export class ReportPageComponent {
     title: ['', [Validators.required, Validators.minLength(3)]],
     text: ['', [Validators.required, Validators.minLength(6)]],
   });
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   sendReport() {
     if (this.reportForm.valid) {
